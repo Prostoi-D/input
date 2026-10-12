@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test</title>
+</head>
+<body>
+    <h1>test</h1>
+
+    <form id="formularz">
+        <div>
+            <label for="imieNazwisko">Imię i nazwisko:</label>
+            <input
+                type="text"
+                id="imieNazwisko"
+                name="imieNazwisko"
+                required
+            >
+        </div>
+
+        <div>
+            <label for="email">Adres e-mail:</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                required
+            >
+        </div>
+
+        <div>
+            <label for="warsztat">Wybierz warsztat:</label>
+            <select id="warsztat" name="warsztat" required>
+                <option value="">Wybierz warsztat...</option>
+                <option value="web">Tworzenie stron internetowych</option>
+                <option value="python">Programowanie w Pythonie</option>
+                <option value="robotyka">Robotyka</option>
+                <option value="grafika">Grafika komputerowa</option>
+            </select>
+        </div>
+
+        <fieldset>
+            <legend>Poziom zaawansowania</legend>
+
+            <input type="radio" id="poziom-poczatkujacy"
+                   name="poziom" value="poczatkujacy" required>
+            <label for="poziom-poczatkujacy">Początkujący</label>
+
+            <input type="radio" id="poziom-sredni"
+                   name="poziom" value="sredni">
+            <label for="poziom-sredni">Średnio zaawansowany</label>
+
+            <input type="radio" id="poziom-zaawansowany"
+                   name="poziom" value="zaawansowany">
+            <label for="poziom-zaawansowany">Zaawansowany</label>
+        </fieldset>
+
+        <fieldset>
+            <legend>Zainteresowania</legend>
+
+            <input type="checkbox" id="zainteresowania-programowanie"
+                   name="zainteresowania" value="programowanie">
+            <label for="zainteresowania-programowanie">Programowanie</label>
+
+            <input type="checkbox" id="zainteresowania-gry"
+                   name="zainteresowania" value="gry">
+            <label for="zainteresowania-gry">Tworzenie gier</label>
+
+            <input type="checkbox" id="zainteresowania-grafika"
+                   name="zainteresowania" value="grafika">
+            <label for="zainteresowania-grafika">Grafika komputerowa</label>
+
+            <input type="checkbox" id="zainteresowania-sieci"
+                   name="zainteresowania" value="sieci">
+            <label for="zainteresowania-sieci">Sieci komputerowe</label>
+        </fieldset>
+
+        <div>
+            <input type="checkbox" id="zgoda" name="zgoda"
+                   value="tak" required>
+            <label for="zgoda">Akceptuję regulamin warsztatów.</label>
+        </div>
+
+        <button type="button" id="sprawdz">Sprawdź zgłoszenie</button>
+    </form>
+
+    <h2>Podsumowanie zgłoszenia</h2>
+    <div id="wynik"></div>
+
+    <script>
+        const formularz = document.getElementById("formularz");
+        const wynik = document.getElementById("wynik");
+
+        document.getElementById("sprawdz").addEventListener("click", function () {
+            if (!formularz.reportValidity()) {
+                return;
+            }
+
+            const dane = new FormData(formularz);
+            const zainteresowania = dane.getAll("zainteresowania");
+
+            wynik.replaceChildren();
+
+            const informacje = [
+                ["Imię i nazwisko", dane.get("imieNazwisko")],
+                ["E-mail", dane.get("email")],
+                ["Warsztat", formularz.querySelector("#warsztat option:checked").textContent],
+                ["Poziom", dane.get("poziom")],
+                ["Zainteresowania", zainteresowania.join(", ") || "Nie wybrano"],
+                ["Zgoda na regulamin", dane.get("zgoda") === "tak" ? "Tak" : "Nie"]
+            ];
+
+            for (const [etykieta, wartosc] of informacje) {
+                const p = document.createElement("p");
+                p.textContent = etykieta + ": " + wartosc;
+                wynik.appendChild(p);
+            }
+        });
+    </script>
+</body>
+</html>
